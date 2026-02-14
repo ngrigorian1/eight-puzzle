@@ -72,7 +72,10 @@ def expand(board):
     return neighbors
 
 
-# ============= HEURISTICS ==========
+# ================= HEURISTICS ===================
+
+# tiny cache to avoid recalculating goal positions
+GOAL_POS_CACHE = {}
 
 # misplaced tiles - count number of tiles in the wrong position
 def misplaced_tiles(board):
@@ -90,11 +93,15 @@ def misplaced_tiles(board):
 
 #helper for manhattan distance - returns dict of values to their goal positions
 def goal_positions(n):
+    cached = GOAL_POS_CACHE.get(n)
+    if cached is not None:
+        return cached
     goal = make_goal(n)
     pos = {}
     for r in range(n):
         for c in range(n):
             pos[goal[r][c]] = (r, c)
+    GOAL_POS_CACHE[n] = pos
     return pos
 
 # manhattan distance - sum of distances from each tile to its goal positions

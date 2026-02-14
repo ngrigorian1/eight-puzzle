@@ -1,6 +1,7 @@
 # for basic user inputs and printing starter board
 
 import puzzle
+import search
 
 def main():
     print("Welcome to the n-puzzle solver.")
@@ -27,15 +28,40 @@ def main():
     print("\nYour initial board is:\n")
     print(puzzle.board_to_string(board))
 
-    # TEMP TESTING
-    test_board = ((1, 2, 3), (4, 5, 6), (7, 0, 8))
-    test2 = puzzle.make_goal(3)
-    test3 = ((1,2,3,4),(5,6,7,8), (9,10,0,12),(13,14,11,15))
-    print("Misplaced tiles:", puzzle.misplaced_tiles(test2)) # should be 0
-    print("Manhattan distance:", puzzle.manhattan(test_board)) # should be 1
-    print("Misplaced tiles:", puzzle.misplaced_tiles(test3)) # should be 2
-    print("Manhattan distance:", puzzle.manhattan(test3)) # should be 2
-    
+    #testing
+    print("\nSelect algorithm:")
+    print("1. Uniform Cost Search")
+    print("2. A* w/ Misplaced Tile heuristic")
+    print("3. A* w/ Manhattan Distance heuristic")
+
+    choice = input("Enter choice: ").strip()
+
+    if choice == "1":
+        result = search.uniform_cost_search(board)
+    elif choice == "2":
+        result = search.astar_misplaced(board)
+    elif choice == "3":
+        result = search.astar_manhattan(board)
+    else:
+        print("Invalid algorithm choice.")
+        return
+
+    if result == "failure":
+        print("\nNo solution found.")
+        return
+
+    print("\nSolution found!")
+    print("Solution depth:", result["solution_depth"])
+    print("Nodes expanded:", result["nodes_expanded"])
+    print("Max queue size:", result["max_queue_size"])
+
+    # print solution path
+    print("\nSolution path:\n")
+    path = search.solution_path(result["goal_node"])
+    for state in path:
+        print(puzzle.board_to_string(state))
+        print("\n")
+
 
 if __name__ == "__main__":
     main()
