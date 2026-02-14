@@ -27,11 +27,15 @@ def main():
     print("\nYour initial board is:\n")
     print(puzzle.board_to_string(board))
 
-    # temp testing
-    print("Neighbors:\n")
-    for nb in puzzle.expand(board):
-        print(puzzle.board_to_string(nb))
-        print("\n")
+    # TEMP TESTING
+    test_board = ((1, 2, 3), (4, 5, 6), (7, 0, 8))
+    test2 = puzzle.make_goal(3)
+    test3 = ((1,2,3,4),(5,6,7,8), (9,10,0,12),(13,14,11,15))
+    print("Misplaced tiles:", puzzle.misplaced_tiles(test2)) # should be 0
+    print("Manhattan distance:", puzzle.manhattan(test_board)) # should be 1
+    print("Misplaced tiles:", puzzle.misplaced_tiles(test3)) # should be 2
+    print("Manhattan distance:", puzzle.manhattan(test3)) # should be 2
+    
 
 if __name__ == "__main__":
     main()

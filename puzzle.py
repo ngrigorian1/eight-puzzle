@@ -70,3 +70,45 @@ def expand(board):
         if 0 <= nr < n and 0 <= nc < n:
             neighbors.append(swap(board, r, c, nr, nc))
     return neighbors
+
+
+# ============= HEURISTICS ==========
+
+# misplaced tiles - count number of tiles in the wrong position
+def misplaced_tiles(board):
+    n = len(board)
+    goal = make_goal(n)
+    
+    count = 0
+    for r in range(n):
+        for c in range(n):
+            val = board[r][c]
+            if val != 0 and val != goal[r][c]:
+                count += 1
+    return count
+
+
+#helper for manhattan distance - returns dict of values to their goal positions
+def goal_positions(n):
+    goal = make_goal(n)
+    pos = {}
+    for r in range(n):
+        for c in range(n):
+            pos[goal[r][c]] = (r, c)
+    return pos
+
+# manhattan distance - sum of distances from each tile to its goal positions
+def manhattan(board):
+    n = len(board)
+    pos = goal_positions(n)
+
+    total = 0
+    for r in range(n):
+        for c in range(n):
+            val = board[r][c]
+            if val == 0:
+                continue
+            goalR, goalC = pos[val]
+            total += abs(r - goalR) + abs(c - goalC)
+    return total
+
